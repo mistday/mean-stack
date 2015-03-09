@@ -1,4 +1,6 @@
-App.controller('MainCtrl', ['$scope', function($scope){
+App.controller('MainCtrl', ['$scope', '$http', '$resource', 
+  function($scope, $http, $resource){
+
   $scope.name = 'MEAN';
 
   $scope.somes = [
@@ -7,6 +9,13 @@ App.controller('MainCtrl', ['$scope', function($scope){
   ];
 
   $scope.addSome = function() {
-    $scope.somes.push({name: $scope.one});
+
+    $http.post('/api', {'name': $scope.one})
+      .success(function(data, status) {
+        $scope.somes.push(data);
+      })
+      .error(function(data, status) {
+        console.log('Error!', data, status);
+      });
   }
 }]);
