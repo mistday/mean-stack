@@ -1,6 +1,8 @@
 App.controller('MainCtrl', ['$scope', '$http', '$resource', 
   function($scope, $http, $resource){
 
+  var Demo = $resource('/api/demo');
+
   $scope.name = 'MEAN';
 
   $scope.somes = [
@@ -10,12 +12,10 @@ App.controller('MainCtrl', ['$scope', '$http', '$resource',
 
   $scope.addSome = function() {
 
-    $http.post('/api', {'name': $scope.one})
-      .success(function(data, status) {
-        $scope.somes.push(data);
-      })
-      .error(function(data, status) {
-        console.log('Error!', data, status);
-      });
+    var demo = new Demo();
+    demo.name = $scope.one;
+    demo.$save(function(result) {
+      $scope.somes,push(result);
+    });
   }
 }]);

@@ -1,10 +1,11 @@
-var express = require('express'),
-	app = express(),
-	bodyParser = require('body-parser'),
-	demoController = require('./server/controllers/demo-controller.js'),
-	mongoose = require('mongoose');
+var express = require('express');
+var app = express();
 
-	mongoose.connect('mongodb://localhost:27017/demo'),
+var bodyParser = require('body-parser');
+
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/demo');
+
 
 app.use(bodyParser.json());
 
@@ -20,7 +21,13 @@ app.get('/', function(req, res) {
 });
 
 //API
-app.post('/api/demo', demoController.create);
+app.get('/api', function(req, res) {
+  console.dir(req);
+  res.json({'name': 'Dogma'});
+});
+app.post('/api', function(req, res) {
+  res.json(req.body);
+});
 
 
 app.listen(3000, function() {
