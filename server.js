@@ -1,15 +1,13 @@
 var express = require('express'),
-	app = express(),
-	bodyParser = require('body-parser'),
-	mongoose = require('mongoose');
+    app = express(),
+    bodyParser = require('body-parser'),
+    mongoose = require('mongoose'),
+    demoController = require('./server/controllers/demo-controller.js');
 
 mongoose.connect('mongodb://localhost/Demo');
 
 
-var Demo = mongoose.model('democols', { name: String });
-
-
-
+// middleware
 app.use(bodyParser.json());
 app
   .use('/js', express.static(__dirname + '/bower_components/angular'))
@@ -23,21 +21,9 @@ app.get('/', function(req, res) {
 });
 
 
-
 //API
-app.get('/api/demo', function(req, res) {
-	Demo.find({}, function(err, results) {
-		res.json(results);
-	});
-});
-app.post('/api/demo', function(req, res) {
-	var demo = new Demo(req.body);
-	demo.save(function(err, results) {
-		res.json(results);
-	});
-});
-
-
+app.get('/api/demo', demoController.query);
+app.post('/api/demo', demoController.save);
 
 
 
