@@ -1,13 +1,16 @@
 var express = require('express'),
 	app = express(),
 	bodyParser = require('body-parser'),
-	demoController = require('./server/controllers/demo-controller.js'),
 	mongoose = require('mongoose');
 
-	mongoose.connect('mongodb://localhost:27017/demo'),
+mongoose.connect('mongodb://localhost/Demo');
+
+
+var Demo = mongoose.model('democols', { name: String });
+
+
 
 app.use(bodyParser.json());
-
 app
   .use('/js', express.static(__dirname + '/bower_components/angular'))
   .use('/js', express.static(__dirname + '/bower_components/angular-resource'))
@@ -19,8 +22,24 @@ app.get('/', function(req, res) {
   res.sendFile(__dirname+'/client/template/index.html');
 });
 
+
+
 //API
-app.post('/api/demo', demoController.create);
+app.get('/api/demo', function(req, res) {
+	Demo.find({}, function(err, results) {
+		res.json(results);
+	});
+});
+app.post('/api/demo', function(req, res) {
+	var demo = new Demo(req.body);
+	demo.save(function(err, results) {
+		res.json(results);
+	});
+});
+
+
+
+
 
 
 app.listen(3000, function() {

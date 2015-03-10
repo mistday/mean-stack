@@ -3,19 +3,17 @@ App.controller('MainCtrl', ['$scope', '$http', '$resource',
 
   var Demo = $resource('/api/demo');
 
-  $scope.name = 'MEAN';
 
-  $scope.somes = [
-    {name: 'some One'},
-    {name: 'some Two'},
-  ];
+  Demo.query(function(results) {
+    $scope.somes = results
+  });
+
 
   $scope.addSome = function() {
-
     var demo = new Demo();
     demo.name = $scope.one;
     demo.$save(function(result) {
-      $scope.somes,push(result);
+      $scope.somes.push(result);
     });
   }
 }]);
